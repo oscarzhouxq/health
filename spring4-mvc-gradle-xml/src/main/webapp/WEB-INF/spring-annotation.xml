@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+  
+  <!-- 指定Spring IOC 容器扫描的包 -->
+  <!-- 可以通过resource-pattern指定扫描的资源 -->
+  <!-- <context:component-scan base-package="com.coslay.beans.annotation"
+    resource-pattern="reporsitory/*.class">
+  </context:component-scan> -->
+  
+  <!-- 
+    context:exclude-filter 子节点指定排除哪些指定表达式的组件
+    context:include-filter 子节点指定包含哪些表达式的组件，该子节点需要use-default-filters="false"配合使用（如果use-default-filters="ture"则使用系统默认扫描所有带有@Component@Controller@Service@Repository的组件）
+   -->
+  <context:component-scan base-package="com">
+    <!-- 
+    <context:exclude-filter type="annotation" 
+      expression="org.springframework.stereotype.Repository"/> 
+    -->
+    <!-- 
+    <context:include-filter type="annotation" 
+    expression="org.springframework.stereotype.Repository"/> 
+    -->
+    <!-- 
+    <context:exclude-filter type="assignable" 
+    expression="com.coslay.beans.annotation.reporsitory.UserRepository"/> 
+    -->
+    <!-- 
+    <context:include-filter type="assignable" 
+    expression="com.coslay.beans.annotation.reporsitory.UserRepository"/> 
+    -->
+  </context:component-scan>
+  
+  <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/test"/>
+        <property name="username" value="root"/>
+        <property name="password" value="123456"/>
+    </bean>
+     
+    <bean id="transactionManager"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" /> 
+    </bean>
+    
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="configLocation" value="mybatis-config.xml"></property>
+        <property name="dataSource" ref="dataSource" />
+        <property name="mapperLocations" value="xml/**/*.xml"></property>  
+    </bean>
+</beans>
